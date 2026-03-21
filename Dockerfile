@@ -56,8 +56,8 @@ COPY --chown=opencode:opencode skills/ skills/
 # Install all skills (opencode agent only)
 RUN eval "$(mise activate bash)" && \
     npx skills add railwayapp/railway-skills -a opencode -y && \
-    npx skills add ./skills -a opencode -y && \
-    rm -rf skills/ skills-lock.json
+    npx skills add ./skills -a opencode -y
+RUN rm -rf skills/ skills-lock.json
 
 ENV CHROME_PATH=/usr/bin/chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium

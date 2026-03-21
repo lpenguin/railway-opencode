@@ -2,6 +2,8 @@
 
 A one-click Railway template that runs an [OpenCode](https://opencode.ai) server with pre-configured skills and tools.
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/h26SmG?referralCode=NhCCIt&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
 ## What's included
 
 **Tools** (via [mise](https://mise.jdx.dev)):
@@ -15,8 +17,6 @@ A one-click Railway template that runs an [OpenCode](https://opencode.ai) server
 - [agent-browser](https://github.com/vercel-labs/agent-browser) — headless browser automation
 
 ## Deploy
-
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/template/xxx)
 
 Set `OPENCODE_SERVER_PASSWORD` as a service variable during deploy.
 
