@@ -42,6 +42,8 @@ USER opencode
 WORKDIR $HOME
 SHELL ["/bin/bash", "-c"]
 
+RUN echo 'eval "$(mise activate bash)"' >> $HOME/.bashrc
+
 COPY --chown=opencode:opencode .mise.toml $MISE_GLOBAL_CONFIG_FILE
 RUN mise install && \
     mise reshim && \
