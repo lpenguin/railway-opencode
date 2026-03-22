@@ -1,8 +1,7 @@
 #!/bin/bash
 set -e
 
-[[ ! -d /workspace/.mise ]] && cp -a /opt/seed/.mise /workspace/.mise
-[[ ! -d /workspace/.agents ]] && cp -a /opt/seed/.agents /workspace/.agents
+[[ ! -d "$HOME/.mise" ]] && cp -a /opt/seed/. "$HOME/"
 
 eval "$(mise activate bash)"
 

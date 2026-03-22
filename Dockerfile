@@ -3,9 +3,9 @@ FROM debian:bookworm-slim
 ENV DEBIAN_FRONTEND=noninteractive
 ENV MISE_YES=1
 ENV HOME=/var/lib/opencode
-ENV MISE_DATA_DIR=/opt/mise-build
-ENV MISE_GLOBAL_CONFIG_FILE=/opt/mise-build/.mise.toml
-ENV PATH="/opt/mise-build/shims:/usr/local/bin:${PATH}"
+ENV MISE_DATA_DIR=/var/lib/opencode/.mise
+ENV MISE_GLOBAL_CONFIG_FILE=/var/lib/opencode/.mise/.mise.toml
+ENV PATH="/var/lib/opencode/.mise/shims:/usr/local/bin:${PATH}"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
@@ -34,31 +34,26 @@ COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN curl https://mise.run | sh && \
     install -m 0755 /var/lib/opencode/.local/bin/mise /usr/local/bin/mise && \
     useradd -m -d "$HOME" -s /bin/bash opencode && \
-    mkdir -p "$MISE_DATA_DIR" /workspace /opt/seed && \
-    chown -R opencode:opencode "$HOME" "$MISE_DATA_DIR" /workspace /opt/seed && \
+    mkdir -p "$MISE_DATA_DIR" /opt/seed && \
+    chown -R opencode:opencode "$HOME" /opt/seed && \
     chmod 0755 /usr/local/bin/entrypoint.sh
 
 USER opencode
-WORKDIR /workspace
+WORKDIR $HOME
 SHELL ["/bin/bash", "-c"]
 
-COPY --chown=opencode:opencode .mise.toml /opt/mise-build/.mise.toml
+COPY --chown=opencode:opencode .mise.toml $MISE_GLOBAL_CONFIG_FILE
 RUN mise install && \
     mise reshim && \
     npm install -g opencode-ai agent-browser && \
     mise reshim
 
-COPY --chown=opencode:opencode skills/ skills/
+COPY --chown=opencode:opencode skills/ /tmp/skills/
 RUN npx skills add railwayapp/railway-skills -a opencode -y && \
-    npx skills add ./skills -a opencode -y && \
-    rm -rf skills/ skills-lock.json
+    npx skills add /tmp/skills -a opencode -y && \
+    rm -rf /tmp/skills skills-lock.json
 
-RUN cp -a /opt/mise-build /opt/seed/.mise && \
-    cp -a /workspace/.agents /opt/seed/.agents
-
-ENV MISE_DATA_DIR=/workspace/.mise
-ENV MISE_GLOBAL_CONFIG_FILE=/workspace/.mise/.mise.toml
-ENV PATH="/workspace/.mise/shims:/usr/local/bin:${PATH}"
+RUN cp -a $HOME/. /opt/seed/
 
 ENV CHROME_PATH=/usr/bin/chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
