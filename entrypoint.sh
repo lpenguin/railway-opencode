@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-[[ ! -d "$HOME/.agents" ]] && cp -a /opt/skills-seed "$HOME/.agents"
+[[ ! -d /workspace/.agents ]] && cp -a /opt/skills-seed /workspace/.agents
 
 eval "$(mise activate bash)"
 

@@ -58,7 +58,7 @@ COPY --chown=opencode:opencode skills/ skills/
 RUN npx skills add railwayapp/railway-skills -a opencode -y && \
     npx skills add ./skills -a opencode -y && \
     rm -rf skills/ skills-lock.json && \
-    cp -a "$HOME/.agents" /opt/skills-seed
+    cp -a /workspace/.agents /opt/skills-seed
 
 ENV CHROME_PATH=/usr/bin/chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
