@@ -63,6 +63,15 @@ RUN cp -a $HOME/. /opt/seed/
 # and chown it before dropping to the opencode user
 USER root
 
+# Make mise available in all shell types (login shells, non-interactive, etc.)
+RUN printf '%s\n' \
+    'export MISE_YES=1' \
+    'export MISE_DATA_DIR=/var/lib/opencode/.mise' \
+    'export MISE_GLOBAL_CONFIG_FILE=/var/lib/opencode/.mise/.mise.toml' \
+    'export PATH="/var/lib/opencode/.mise/shims:/usr/local/bin:${PATH}"' \
+    '[ -x /usr/local/bin/mise ] && eval "$(mise activate bash)"' \
+    > /etc/profile.d/mise.sh && chmod 0644 /etc/profile.d/mise.sh
+
 ENV CHROME_PATH=/usr/bin/chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV CHROMIUM_PATH=/usr/bin/chromium
