@@ -59,6 +59,10 @@ RUN npx skills add railwayapp/railway-skills -a opencode -y && \
 
 RUN cp -a $HOME/. /opt/seed/
 
+# Switch back to root so entrypoint can seed the volume (root-owned on Railway)
+# and chown it before dropping to the opencode user
+USER root
+
 ENV CHROME_PATH=/usr/bin/chromium
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV CHROMIUM_PATH=/usr/bin/chromium

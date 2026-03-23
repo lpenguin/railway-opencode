@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e
 
-# If running as root, re-exec as opencode user
+# If running as root, seed the volume (volume is root-owned) then drop to opencode
 if [[ "$(id -u)" -eq 0 ]]; then
+    if [[ ! -d "$HOME/.mise" ]]; then
+        cp -a /opt/seed/. "$HOME/"
+        chown -R opencode:opencode "$HOME"
+    fi
     exec su -s /bin/bash -c "exec $0 $*" opencode
 fi
-
-[[ ! -d "$HOME/.mise" ]] && cp -a /opt/seed/. "$HOME/" 2>/dev/null || true
 
 eval "$(mise activate bash)"
 
