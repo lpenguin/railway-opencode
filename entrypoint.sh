@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# If running as root, re-exec as opencode user
+if [[ "$(id -u)" -eq 0 ]]; then
+    exec su -s /bin/bash -c "exec $0 $*" opencode
+fi
+
 [[ ! -d "$HOME/.mise" ]] && cp -a /opt/seed/. "$HOME/" 2>/dev/null || true
 
 eval "$(mise activate bash)"
